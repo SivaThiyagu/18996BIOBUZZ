@@ -27,7 +27,7 @@ import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
  * 2) Lateral:  Strafing right and left                     Left-joystick Right and Left
  * 3) Yaw:      Rotating Clockwise and counter clockwise    Right-joystick Right and Left
  *
- * This code is written assuming that the right-side motors need to be reversed for the robot to drive forward.
+ * This code is written assuming that the left-side motors need to be reversed for the robot to drive forward.
  * When you first test your robot, if it moves backward when you push the left stick forward, then you must flip
  * the direction of all 4 motors (see code below).
  *
@@ -35,7 +35,7 @@ import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Basic: Omni Linear OpMode", group="Linear OpMode")
+@TeleOp(name="BIOBUZZ Drive", group="BIOBUZZ")
 
 public class BasicLinearTeleOp extends LinearOpMode {
 
@@ -129,6 +129,13 @@ public class BasicLinearTeleOp extends LinearOpMode {
             backRightPower  = gamepad1.b ? 1.0 : 0.0;  // B gamepad
             */
 
+            // Hold left bumper for precise driving; preserve the wheel power ratios.
+            double driveScale = gamepad1.left_bumper ? 0.35 : 1.0;
+            frontLeftPower *= driveScale;
+            frontRightPower *= driveScale;
+            backLeftPower *= driveScale;
+            backRightPower *= driveScale;
+
             // Send calculated power to wheels
             frontLeftMotor.setPower(frontLeftPower);
             frontRightMotor.setPower(frontRightPower);
@@ -137,6 +144,7 @@ public class BasicLinearTeleOp extends LinearOpMode {
 
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Drive mode", gamepad1.left_bumper ? "Slow (35%)" : "Normal");
             telemetry.addData("Front left/Right", "%4.2f, %4.2f", frontLeftPower, frontRightPower);
             telemetry.addData("Back  left/Right", "%4.2f, %4.2f", backLeftPower, backRightPower);
             telemetry.update();
