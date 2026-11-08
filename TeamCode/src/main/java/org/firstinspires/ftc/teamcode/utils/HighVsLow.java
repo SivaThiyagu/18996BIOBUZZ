@@ -5,7 +5,6 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import java.util.List;
 import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
 
@@ -25,36 +24,41 @@ public class HighVsLow extends LinearOpMode {
             waitForStart();
 
             while (opModeIsActive()) {
-                LLResult result = limelight.getLatestResult();
-                if (result != null && result.isValid() && result.getStaleness() <= 100) {
-                    List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-                    List<LLResultTypes.DetectorResult> detections = result.getDetectorResults();
+                LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("limelight");
 
-                    for (int i = 0; i < colorResults.size(); i++) {
-                        LLResultTypes.ColorResult cr = colorResults.get(i);
+                if (results.vpr.isValid && results.vpr.retroOutputs.length > 0) {
 
-                        telemetry.addData("Target #" + i, "X: %.2f, Y: %.2f, Area: %.2f%%",
-                                cr.getTargetXDegrees(),
-                                cr.getTargetYDegrees(),
-                                cr.getTargetArea());
-                        telemetry.addData("Color Result: ", cr);
+                    double[] rawX = results.vpr.retroOutputs.tcornx;
+                    double[] rawY = results.vpr.retroOutputs.tcorny;
 
+                    if (rawX != null && rawY != null && rawX.length >= 4) {
+
+                        // Corner 1 (Index 0)
+                        double c1_x = rawX[0];
+                        double c1_y = rawY[0];
+
+                        // Corner 2 (Index 1)
+                        double c2_x = rawX[1];
+                        double c2_y = rawY[1];
+
+                        // Corner 3 (Index 2)
+                        double c3_x = rawX[2];
+                        double c3_y = rawY[2];
+
+                        // Corner 4 (Index 3)
+                        double c4_x = rawX[3];
+                        double c4_y = rawY[3];
+
+
+                    } else {
+                        telemetry.addLine("Error: Limelight is returning fewer than 4 corners.");
                     }
-                    telemetry.addData("Detections Result: ", detections);
-                }
-                else {
-                    if (result == null) {
-                        telemetry.addData("Status", "Error: Result object is NULL. Check camera connection/initialization.");
-                    } else if (result.getStaleness() > 100) {
-                        telemetry.addData("Status", "Stale camera data; ignore observation.");
-                    } else if (!result.isValid()) {
-                        telemetry.addData("Status", "Connected, but result is INVALID. (Camera sees no targets).");
+                else{
+                        telemetry.addLine("No target visible on screen.");
                     }
-                }
-                telemetry.update();
-            }
-        } finally {
+        finally {
             limelight.stop();
-        }
-    }
-}
+                }
+            }
+
+            }

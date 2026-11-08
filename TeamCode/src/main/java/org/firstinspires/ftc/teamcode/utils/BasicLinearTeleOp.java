@@ -56,9 +56,7 @@ public class BasicLinearTeleOp extends LinearOpMode {
         // to the names assigned during the robot configuration step on the DS or RC devices.
         frontLeftMotor = hardwareMap.get(DcMotor.class, HardwareMapNames.DRIVE_FRONT_LEFT);
         backLeftMotor= hardwareMap.get(DcMotor.class, HardwareMapNames.DRIVE_BACK_LEFT);
-
         frontRightMotor = hardwareMap.get(DcMotor.class, HardwareMapNames.DRIVE_FRONT_RIGHT);
-
         backRightMotor = hardwareMap.get(DcMotor.class, HardwareMapNames.DRIVE_BACK_RIGHT);
 
         // ########################################################################################
