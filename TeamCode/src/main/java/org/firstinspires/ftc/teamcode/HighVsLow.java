@@ -35,7 +35,7 @@ public class HighVsLow extends LinearOpMode {
                     for (LLResultTypes.ColorResult colorTarget : colorResults) {
                         List<List<Double>> corners = colorTarget.getTargetCorners();
 
-                        if (corners != null) {
+                        if (corners != null && !corners.isEmpty()) {
                             double lowest_x = 0;
                             double highest_x = 0;
                             double highest_y = -9999999;
