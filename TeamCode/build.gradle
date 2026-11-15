@@ -27,3 +27,11 @@ android {
 dependencies {
     implementation project(':FtcRobotController')
 }
+
+repositories {
+    maven { url "https://repo.dairy.foundation/releases" }
+}
+
+dependencies {
+    implementation 'org.solverslib:core:0.3.6' // (or latest version)
+}
