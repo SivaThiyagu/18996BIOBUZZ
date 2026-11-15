@@ -25,53 +25,37 @@ public class HighVsLow extends LinearOpMode {
             waitForStart();
 
             while (opModeIsActive()) {
-                LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("limelight");
-
-                // Corrected outer IF layout
-                if (results.vpr.retroOutputs.length > 0) {
+                LLResult result = limelight.getLatestResult();
 
 
-                    double[] rawX = results.vpr.retroOutputs[0].tcornx;
-                    double[] rawY = results.vpr.retroOutputs[0].tcorny;
+                if (result.isValid()) {
+                    List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 
-                    if (rawX != null && rawY != null && rawX.length >= 4) {
-                        // Corner 1
-                        double c1_x = rawX[0];
-                        double c1_y = rawY[0];
+                    for (LLResultTypes.ColorResult colorTarget : colorResults) {
+                        List<List<Double>> corners = colorTarget.getTargetCorners();
 
-                        // Corner 2
-                        double c2_x = rawX[1];
-                        double c2_y = rawY[1];
+                        if (corners != null) {
+                            for (int i = 0; i < corners.size(); i++) {
+                                double x = corners.get(i).get(0);
+                                double y = corners.get(i).get(1);
+                                telemetry.addData("Corner " + i, "X: %.1f, Y: %.1f", x, y);
+                            }
+                        }
 
-                        // Corner 3
-                        double c3_x = rawX[2];
-                        double c3_y = rawY[2];
-
-                        // Corner 4
-                        double c4_x = rawX[3];
-                        double c4_y = rawY[3];
-                        telemetry.addData("c1x: ",  c1_x);
-                        telemetry.addData("c1y: ",  c1_y);
-                        telemetry.addData("c2x: ",  c2_x);
-                        telemetry.addData("c2y: ",  c2_y);
-                        telemetry.addData("c3x: ",  c3_x);
-                        telemetry.addData("c3y: ",  c3_y);
-                        telemetry.addData("c4x: ",  c4_x);
-                        telemetry.addData("c4y: ",  c4_y);
-
-
-
+                       else {
+                            telemetry.addLine("Error: Limelight is returning fewer than 4 corners.");
+                        }
                         telemetry.update();
-                    } else {
-                        telemetry.addLine("Error: Limelight is returning fewer than 4 corners.");
                     }
-                } else {
+                }
+                else {
                     telemetry.addLine("No target visible on screen.");
                 }
 
                 telemetry.update();
             }
-        } finally {
+        }
+        finally {
             limelight.stop();
         }
     }
