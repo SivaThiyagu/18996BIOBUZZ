@@ -29,7 +29,7 @@ public class HighVsLow extends LinearOpMode {
 
 
 
-                if (result.isValid()) {
+                if (result.isValid() && result != null) {
                     List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 
                     for (LLResultTypes.ColorResult colorTarget : colorResults) {
@@ -48,7 +48,7 @@ public class HighVsLow extends LinearOpMode {
                                     lowest_x = x;
                                     lowest_y = y;
                                 }
-                                else if (y > highest_y) {
+                                if (y > highest_y) {
                                     highest_x = x;
                                     highest_y = y;
                                 }
