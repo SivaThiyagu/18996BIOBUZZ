@@ -26,6 +26,10 @@ public class HighVsLow extends LinearOpMode {
 
             while (opModeIsActive()) {
                 LLResult result = limelight.getLatestResult();
+                double lowest_x = 0;
+                double highest_x = 0;
+                double highest_y = -9999999;
+                double lowest_y = 99999999;
 
 
                 if (result.isValid()) {
@@ -35,11 +39,28 @@ public class HighVsLow extends LinearOpMode {
                         List<List<Double>> corners = colorTarget.getTargetCorners();
 
                         if (corners != null) {
+
                             for (int i = 0; i < corners.size(); i++) {
                                 double x = corners.get(i).get(0);
                                 double y = corners.get(i).get(1);
+                                if (y < lowest_y) {
+                                    lowest_x = x;
+                                    lowest_y = y;
+                                }
+                                else if (y > highest_y) {
+                                    highest_x = x;
+                                    highest_y = y;
+                                }
                                 telemetry.addData("Corner " + i, "X: %.1f, Y: %.1f", x, y);
+
                             }
+                            if (highest_x > lowest_x) {
+                                telemetry.addData("Tipped: ", "right");
+                            }
+                            else if (highest_x < lowest_x) {
+                                telemetry.addData("Tipped: ", "left");
+                            }
+
                         }
 
                        else {
