@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -6,81 +7,80 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
-import org.firstinspires.ftc.teamcode.LimelightHelpers;
 
 @TeleOp(name = "HighVsLow", group = "Sensor")
 public class HighVsLow extends LinearOpMode {
-
-    private Limelight3A limelight;
-
     @Override
     public void runOpMode() {
-        limelight = hardwareMap.get(Limelight3A.class, HardwareMapNames.LIMELIGHT);
-        telemetry.setMsTransmissionInterval(11);
+        Limelight3A limelight = hardwareMap.get(Limelight3A.class, HardwareMapNames.LIMELIGHT);
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(1);
         limelight.start();
 
         try {
             waitForStart();
-
             while (opModeIsActive()) {
                 LLResult result = limelight.getLatestResult();
+                telemetry.addData("Corner comparison", "Unknown");
 
-
-
-                if (result.isValid() && result != null) {
-                    List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-
-                    for (LLResultTypes.ColorResult colorTarget : colorResults) {
-                        List<List<Double>> corners = colorTarget.getTargetCorners();
-
-                        if (corners != null && !corners.isEmpty()) {
-                            double lowest_x = 0;
-                            double highest_x = 0;
-                            double highest_y = -9999999;
-                            double lowest_y = 99999999;
-
-                            for (int i = 0; i < corners.size(); i++) {
-                                double x = corners.get(i).get(0);
-                                double y = corners.get(i).get(1);
-                                if (y < lowest_y) {
-                                    lowest_x = x;
-                                    lowest_y = y;
+                if (result == null || !result.isValid()) {
+                    telemetry.addLine("No target visible.");
+                } else if (result.getPipelineIndex() != 1 || result.getStaleness() > 200) {
+                    telemetry.addLine("Waiting for fresh data from pipeline 1.");
+                } else {
+                    List<LLResultTypes.ColorResult> targets = result.getColorResults();
+                    if (targets == null || targets.size() != 1) {
+                        telemetry.addLine("Show the camera one color target.");
+                    } else {
+                        List<List<Double>> corners = targets.get(0).getTargetCorners();
+                        boolean validCorners = corners != null && corners.size() == 4;
+                        if (validCorners) {
+                            for (List<Double> corner : corners) {
+                                if (corner == null || corner.size() < 2
+                                        || corner.get(0) == null || corner.get(1) == null) {
+                                    validCorners = false;
+                                    break;
                                 }
-                                if (y > highest_y) {
-                                    highest_x = x;
-                                    highest_y = y;
-                                }
-                                telemetry.addData("Corner " + i, "X: %.1f, Y: %.1f", x, y);
-
                             }
-                            if (highest_x > lowest_x) {
-                                telemetry.addData("Tipped: ", "right");
-                            }
-                            else if (highest_x < lowest_x) {
-                                telemetry.addData("Tipped: ", "left");
-                            }
-                            else {
-                                telemetry.addData("Tipped: ", "unknown");
-                            }
-
                         }
 
-                       else {
-                            telemetry.addLine("Error: Limelight is returning fewer than 4 corners.");
+                        if (!validCorners) {
+                            telemetry.addLine("Need four corners with X and Y coordinates.");
+                        } else {
+                            double topX = corners.get(0).get(0);
+                            double topY = corners.get(0).get(1);
+                            double bottomX = topX;
+                            double bottomY = topY;
+
+                            for (List<Double> corner : corners) {
+                                double x = corner.get(0);
+                                double y = corner.get(1);
+                                if (y < topY) {
+                                    topX = x;
+                                    topY = y;
+                                }
+                                if (y > bottomY) {
+                                    bottomX = x;
+                                    bottomY = y;
+                                }
+                            }
+
+                            telemetry.addData("Top corner X / Y", "%.1f / %.1f", topX, topY);
+                            telemetry.addData("Bottom corner X / Y", "%.1f / %.1f", bottomX, bottomY);
+                            if (topX > bottomX) {
+                                telemetry.addData("Corner comparison", "Top is right of bottom");
+                            } else if (topX < bottomX) {
+                                telemetry.addData("Corner comparison", "Top is left of bottom");
+                            } else {
+                                telemetry.addData("Corner comparison", "Same X position");
+                            }
                         }
-                        telemetry.update();
                     }
                 }
-                else {
-                    telemetry.addLine("No target visible on screen.");
-                }
-
                 telemetry.update();
+                sleep(100);
             }
-        }
-        finally {
+        } finally {
             limelight.stop();
         }
     }
