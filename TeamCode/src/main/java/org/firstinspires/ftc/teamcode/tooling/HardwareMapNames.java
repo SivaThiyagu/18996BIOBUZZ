@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.tools;
+package org.firstinspires.ftc.teamcode.tooling;
 
 /**
  * Device names must match the robot's active hardware configuration exactly.

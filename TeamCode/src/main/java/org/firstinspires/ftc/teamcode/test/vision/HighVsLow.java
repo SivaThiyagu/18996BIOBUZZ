@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test.vision;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
@@ -6,7 +6,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.List;
-import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
+import org.firstinspires.ftc.teamcode.tooling.HardwareMapNames;
 
 @TeleOp(name = "HighVsLow", group = "Sensor")
 public class HighVsLow extends LinearOpMode {
@@ -14,26 +14,24 @@ public class HighVsLow extends LinearOpMode {
     public void runOpMode() {
         Limelight3A limelight = hardwareMap.get(Limelight3A.class, HardwareMapNames.LIMELIGHT);
         limelight.setPollRateHz(100);
-        limelight.pipelineSwitch(1);
+        limelight.pipelineSwitch(0);
         limelight.start();
 
         try {
             waitForStart();
             while (opModeIsActive()) {
                 LLResult result = limelight.getLatestResult();
-                telemetry.addData("Corner comparison", "Unknown");
-
                 if (result == null || !result.isValid()) {
-                    telemetry.addLine("No target visible.");
-                } else if (result.getPipelineIndex() != 1 || result.getStaleness() > 200) {
-                    telemetry.addLine("Waiting for fresh data from pipeline 1.");
+                    telemetry.addLine("No target visible");
+                } else if (result.getPipelineIndex() != 0 || result.getStaleness() > 200) {
+                    telemetry.addLine("Need better data from pipeline 0");
                 } else {
                     List<LLResultTypes.ColorResult> targets = result.getColorResults();
                     if (targets == null || targets.size() != 1) {
-                        telemetry.addLine("Show the camera one color target.");
+                        telemetry.addLine("must be 1 color target");
                     } else {
                         List<List<Double>> corners = targets.get(0).getTargetCorners();
-                        boolean validCorners = corners != null && corners.size() == 4;
+                        boolean validCorners = (corners != null && corners.size() == 4);
                         if (validCorners) {
                             for (List<Double> corner : corners) {
                                 if (corner == null || corner.size() < 2
@@ -45,7 +43,7 @@ public class HighVsLow extends LinearOpMode {
                         }
 
                         if (!validCorners) {
-                            telemetry.addLine("Need four corners with X and Y coordinates.");
+                            telemetry.addLine("Need four corners with X and Y coordinates");
                         } else {
                             double topX = corners.get(0).get(0);
                             double topY = corners.get(0).get(1);
@@ -68,11 +66,11 @@ public class HighVsLow extends LinearOpMode {
                             telemetry.addData("Top corner X / Y", "%.1f / %.1f", topX, topY);
                             telemetry.addData("Bottom corner X / Y", "%.1f / %.1f", bottomX, bottomY);
                             if (topX > bottomX) {
-                                telemetry.addData("Corner comparison", "Top is right of bottom");
+                                telemetry.addData("Tilt: ", "Top is right of bottom, titled left");
                             } else if (topX < bottomX) {
-                                telemetry.addData("Corner comparison", "Top is left of bottom");
+                                telemetry.addData("Tilt: ", "Top is left of bottom, titled right");
                             } else {
-                                telemetry.addData("Corner comparison", "Same X position");
+                                telemetry.addData("Tilt: ", "Same X position, balanced");
                             }
                         }
                     }

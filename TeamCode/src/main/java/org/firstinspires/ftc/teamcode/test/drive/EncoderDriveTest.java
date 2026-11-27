@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test.drive;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
+import org.firstinspires.ftc.teamcode.tooling.HardwareMapNames;
 
 @Autonomous(name = "BIOBUZZ Encoder", group = "BIOBUZZ")
 public class EncoderDriveTest extends LinearOpMode {
@@ -44,7 +44,6 @@ public class EncoderDriveTest extends LinearOpMode {
         int[] startTicks = new int[motors.length];
         boolean reachedTargets = false;
         try {
-            // Set a target relative to each wheel's current position.
             for (int i = 0; i < motors.length; i++) {
                 startTicks[i] = motors[i].getCurrentPosition();
                 motors[i].setTargetPosition(startTicks[i] + TEST_TICKS);
@@ -57,7 +56,6 @@ public class EncoderDriveTest extends LinearOpMode {
             }
 
             while (opModeIsActive() && timer.seconds() < TIMEOUT_SECONDS) {
-                // Keep going until every wheel has reached its target.
                 reachedTargets = !frontLeft.isBusy() && !frontRight.isBusy()
                         && !backLeft.isBusy() && !backRight.isBusy();
                 if (reachedTargets) {

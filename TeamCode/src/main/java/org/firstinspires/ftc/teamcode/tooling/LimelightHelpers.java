@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.tooling;
 
 import com.google.gson.Gson;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -12,7 +12,7 @@ import java.net.URL;
  * Simplified LimelightHelpers for FTC.
  * Fetches and parses the JSON results string directly from the Limelight 3A web server.
  */
-public class LimelightHelpers {
+public class LimelightHelpers  {
 
     public static class LimelightResults {
         public Results vpr;

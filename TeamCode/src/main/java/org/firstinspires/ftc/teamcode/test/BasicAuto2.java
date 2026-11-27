@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.test;
 
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -54,7 +54,7 @@ public class BasicAuto2 extends LinearOpMode {
             else {
                 servo0.setPosition(0);
             }
-            if (gamepad1.right_trigger_pressed) {
+            if (gamepad1.right_trigger > 0) {
                 servo1.setPosition(gamepad1.right_trigger);
             }
             else{

@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.test.vision;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.tools.HardwareMapNames;
+import org.firstinspires.ftc.teamcode.tooling.HardwareMapNames;
 import java.util.List;
 
 /** Reports individual tags only. This diagnostic never commands motors or estimates field pose. */
