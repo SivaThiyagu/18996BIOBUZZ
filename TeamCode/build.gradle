@@ -10,11 +10,26 @@ apply plugin: 'com.android.application'
 // please think carefully as to whether such customizations are really necessary
 // before doing so.
 
+/*
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url "https://repo.dairy.foundation/releases"
+        }
+    }
+    dependencies {
+        classpath "dev.frozenmilk:Load:0.3.2"
+    }
+}
+*/
 // Custom definitions may go here
 
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
+//apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -26,4 +41,18 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
+    implementation 'org.solverslib:core:0.3.6'
+    implementation 'com.pedropathing:ftc:2.1.2'
+    //implementation 'dev.frozenmilk.sinister:Sloth:0.3.2'
+    //implementation 'com.bylazar:fullpanels:1.0.20'
+}
+
+repositories {
+    // Dairy releases repository
+    maven {
+        url = "https://repo.dairy.foundation/releases"
+    }
+    maven {
+        url = "https://mymaven.bylazar.com/releases"
+    }
 }
