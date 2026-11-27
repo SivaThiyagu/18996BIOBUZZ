@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ManualShooter;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.tooling.HardwareMapNames;
-
+//hypothetical
 @Autonomous(name = "BIOBUZZ Score + Park", group = "BIOBUZZ")
 public class RealAuto extends LinearOpMode {
     private static final Pose START = waypoint(0, 0, 0);
