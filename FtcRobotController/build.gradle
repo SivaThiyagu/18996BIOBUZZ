@@ -1,57 +1,30 @@
-apply plugin: 'com.android.application'
+import java.text.SimpleDateFormat
 
 //
-// build.gradle in TeamCode
+// build.gradle in FtcRobotController
 //
-// Most of the definitions for building your module reside in a common, shared
-// file 'build.common.gradle'. Being factored in this way makes it easier to
-// integrate updates to the FTC into your code. If you really need to customize
-// the build definitions, you can place those customizations in this file, but
-// please think carefully as to whether such customizations are really necessary
-// before doing so.
-
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-        maven {
-            url "https://repo.dairy.foundation/releases"
-        }
-    }
-    dependencies {
-        classpath "dev.frozenmilk:Load:0.3.2"
-    }
-}
-
-// Custom definitions may go here
-
-// Include common definitions from above.
-apply from: '../build.common.gradle'
-apply from: '../build.dependencies.gradle'
-apply plugin: 'dev.frozenmilk.sinister.sloth.load'
+apply plugin: 'com.android.library'
 
 android {
-    namespace = 'org.firstinspires.ftc.teamcode'
 
-    packagingOptions {
-        jniLibs.useLegacyPackaging true
+    defaultConfig {
+        minSdkVersion 24
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 28
+        buildConfigField "String", "APP_BUILD_TIME", '"' + (new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.ROOT).format(new Date())) + '"'
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    compileSdkVersion 30
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace = 'com.qualcomm.ftcrobotcontroller'
 }
 
-dependencies {
-    implementation project(':FtcRobotController')
-    implementation 'org.solverslib:core:0.3.6'
-    implementation 'com.pedropathing:ftc:2.1.2'
-    implementation 'dev.frozenmilk.sinister:Sloth:0.3.2'
-    implementation 'com.bylazar:fullpanels:1.0.20'
-}
-
-repositories {
-    // Dairy releases repository
-    maven {
-        url = "https://repo.dairy.foundation/releases"
-    }
-    maven {
-        url = "https://mymaven.bylazar.com/releases"
-    }
-}
+apply from: '../build.dependencies.gradle'
