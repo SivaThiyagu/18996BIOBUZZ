@@ -15,6 +15,7 @@ public class TransferMotorTest extends LinearOpMode {
         DcMotor transfer = hardwareMap.get(DcMotor.class, HardwareMapNames.TRANSFER_MOTOR);
         transfer.setPower(0);
         transfer.setDirection(DcMotor.Direction.REVERSE);
+        transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
