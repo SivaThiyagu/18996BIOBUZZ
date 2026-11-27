@@ -81,15 +81,23 @@ public class DriveAndIntakeTeleOp extends LinearOpMode {
                 if (!gamepad2.y) {
                     shooterButtonReleased = true;
                 }
-                if (gamepad1.xWasPressed()) {
-                    transfer.setPower(0.75);
-                }
+
                 boolean spinShooter = shooterButtonReleased && gamepad2.y;
                 shooter.setRunning(spinShooter);
                 transfer.move(gamepad2.right_bumper, gamepad2.left_bumper);
-                if (transfer.getPosition() > tickcount) {
-                    transfer.setPower()
+                /*if (gamepad1.xWasPressed()) {
+                    transfer.setPower(0.75);
+                    boolean up = true;
+                } */
+                /*if (transfer.getPosition() > tickcount && up) {
+                    transfer.setPower(-0.75)
+                   boolean up = false;
                 }
+
+                if (!up && transfer.getPosition() < down_tickcount) {
+                    transfer.setPower(0);
+                }*/
+
                 telemetry.addData("Intake", "%.0f%%", intakePower);
                 telemetry.addData("Paddle", "%.0f%% | %d ticks", transfer.getPower(), transfer.getPosition());
                 telemetry.addData("Shooter", shooter.getStatus(spinShooter));
