@@ -43,6 +43,7 @@ dependencies {
     implementation project(':FtcRobotController')
     implementation 'org.solverslib:core:0.3.6'
     implementation 'com.pedropathing:ftc:2.1.2'
+    implementation 'com.pedropathing.ivy:pedro:1.1.1'
     //implementation 'dev.frozenmilk.sinister:Sloth:0.3.2'
     //implementation 'com.bylazar:fullpanels:1.0.20'
 }

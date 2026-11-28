@@ -9,10 +9,10 @@ import org.firstinspires.ftc.teamcode.tooling.HardwareMapNames;
 
 public class DriveSubsystem extends SubsystemBase {
     // Constructor: find motors and set their directions/modes.
-    private DcMotor frontLeftMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backRightMotor;
+    private final DcMotor frontLeftMotor;
+    private final DcMotor backLeftMotor;
+    private final DcMotor frontRightMotor;
+    private final DcMotor backRightMotor;
     public DriveSubsystem(HardwareMap hardwareMap){
 
 
